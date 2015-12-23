@@ -9,10 +9,6 @@ const path = require('path');
 
 const consts = require('./consts.js');
 
-const buildDir = path.join(__dirname, 'build/');
-
-const s3 = new Aws.S3();
-
 function getStream(path, cb, thisArg) {
     const stream = fs.createReadStream(path);
     stream.on('error', cb.bind(thisArg));
@@ -27,6 +23,7 @@ class Uploader extends events.EventEmitter {
         this.opts = opts || {};
         this.bucket = bucket;
         this.targetDir = targetDir;
+        this.s3 = new Aws.S3();
     }
 
     start() {
@@ -62,7 +59,7 @@ class Uploader extends events.EventEmitter {
     _uploadFile(file) {
         getStream(file, this._wrapError(function(stream) {
             this.emit(consts.UPLOADING, file);
-            s3.putObject({
+            this.s3.putObject({
                 Bucket: this.bucket,
                 Key: this._getTargetFilename(file),
                 Body: stream
