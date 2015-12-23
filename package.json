@@ -21,9 +21,7 @@
   "homepage": "https://github.com/Testlio/upload-to-s3#readme",
   "dependencies": {
     "aws-sdk": "^2.2.26",
-    "file": "^0.2.2"
-  },
-  "devDependencies": {
+    "file": "^0.2.2",
     "commander": "^2.9.0"
   }
 }
