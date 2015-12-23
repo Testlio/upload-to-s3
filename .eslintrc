@@ -1,0 +1,43 @@
+{
+    "rules": {
+        "indent": [
+            2,
+            4
+        ],
+        "quotes": [
+            2,
+            "single"
+        ],
+        "linebreak-style": [
+            2,
+            "unix"
+        ],
+        "semi": [
+            2,
+            "always"
+        ],
+        "no-var": 1,
+        "no-irregular-whitespace": 2,
+        "no-mixed-requires": 2,
+        "react/prop-types": 1,
+        "prefer-const": 1
+    },
+    "parser": "babel-eslint",
+    "env": {
+        "es6": true,
+        "browser": true,
+        "node": true
+    },
+    "ecmaFeatures": {
+        "jsx": true,
+        "modules": true,
+        "experimentalObjectRestSpread": true
+    },
+    "plugins": [
+        "react"
+    ],
+    "settings": {
+        "ecmascript": 6,
+        "jsx": true
+    }
+}

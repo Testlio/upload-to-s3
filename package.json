@@ -1,0 +1,29 @@
+{
+  "name": "upload-to-s3",
+  "version": "1.0.0",
+  "description": "Upload files to s3 bucket",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm test"
+  },
+  "bin": {
+    "upload-to-s3": "./bin/upload-to-s3.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Testlio/upload-to-s3.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Testlio/upload-to-s3/issues"
+  },
+  "homepage": "https://github.com/Testlio/upload-to-s3#readme",
+  "dependencies": {
+    "aws-sdk": "^2.2.26",
+    "file": "^0.2.2"
+  },
+  "devDependencies": {
+    "commander": "^2.9.0"
+  }
+}
