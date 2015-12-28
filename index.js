@@ -55,7 +55,6 @@ class Uploader extends events.EventEmitter {
     }
 
     _getTargetFilename(file) {
-        console.log(this.opts.flatten);
         const shortName = this.opts.flatten ? this._removeAssetTargetDir(file) : file;
         const prefix = this.opts.prefix;
         if (!prefix) {
