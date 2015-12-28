@@ -15,31 +15,49 @@ function getStream(path, cb, thisArg) {
     stream.on('open', cb.bind(thisArg, null, stream));
 }
 
+function isDirectory(path, cb) {
+    fs.lstat(path, function(err, stat) {
+        if (err) { return cb(err); }
+        cb(null, stat.isDirectory());
+    });
+}
+
 class Uploader extends events.EventEmitter {
-    constructor (bucket, targetDir, opts) {
+    constructor (bucket, target, opts) {
         assert(bucket, 'Bucket needs to be defined');
-        assert(targetDir, 'Target directory needs to be defined');
+        assert(target, 'Target directory needs to be defined');
         super();
         this.opts = opts || {};
         this.bucket = bucket;
-        this.targetDir = targetDir;
+        this.target = target;
         this.s3 = new Aws.S3();
     }
 
     start() {
-        file.walk(this.targetDir, this._wrapError(function(start, dirs, files) {
-            files.forEach(this._uploadFile, this);
+        isDirectory(this.target, this._wrapError(function(res) {
+            this.isDirectory = res;
+            if (res) { return this._walkDir(this.target); }
+            return this._uploadFile(this.target);
         }));
         return this;
     }
 
+    _walkDir(dir) {
+        file.walk(dir, this._wrapError(function(start, dirs, files) {
+            files.forEach(this._uploadFile, this);
+        }));
+    }
+
     _removeAssetTargetDir(file) {
-        return path.resolve('./', file).replace(path.resolve(this.targetDir), '');
+        const dirname = path.resolve(path.dirname(this.target));
+        const res = path.resolve(file).replace(dirname, '');
+        return this.isDirectory ? res.replace(this.target, '') : res;
     }
 
     _getTargetFilename(file) {
         const shortName = this._removeAssetTargetDir(file);
-        if (!this.opts.prefix) {
+        const prefix = this.opts.prefix;
+        if (!prefix) {
             return shortName;
         }
         return path.join(this.opts.prefix, shortName);
@@ -63,8 +81,8 @@ class Uploader extends events.EventEmitter {
                 Bucket: this.bucket,
                 Key: this._getTargetFilename(file),
                 Body: stream
-            }, this._wrapError(function() {
-                this.emit(consts.DONE, file);
+            }, this._wrapError(function(data) {
+                this.emit(consts.DONE, file, data);
             }));
         }), this);
     }
