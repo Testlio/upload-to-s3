@@ -55,7 +55,8 @@ class Uploader extends events.EventEmitter {
     }
 
     _getTargetFilename(file) {
-        const shortName = this._removeAssetTargetDir(file);
+        console.log(this.opts.flatten);
+        const shortName = this.opts.flatten ? this._removeAssetTargetDir(file) : file;
         const prefix = this.opts.prefix;
         if (!prefix) {
             return shortName;
@@ -76,10 +77,11 @@ class Uploader extends events.EventEmitter {
 
     _uploadFile(file) {
         getStream(file, this._wrapError(function(stream) {
-            this.emit(consts.UPLOADING, file);
-            this.s3.putObject({
+            const key = this._getTargetFilename(file);
+            this.emit(consts.UPLOADING, file, key);
+            this.s3.upload({
                 Bucket: this.bucket,
-                Key: this._getTargetFilename(file),
+                Key: key,
                 Body: stream
             }, this._wrapError(function(data) {
                 this.emit(consts.DONE, file, data);
