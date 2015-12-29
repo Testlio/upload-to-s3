@@ -6,6 +6,7 @@ const assert = require('assert');
 const file = require('file');
 const Aws = require('aws-sdk');
 const path = require('path');
+const mime = require('mime');
 
 const consts = require('./consts.js');
 
@@ -82,7 +83,8 @@ class Uploader extends events.EventEmitter {
             this.s3.upload({
                 Bucket: this.bucket,
                 Key: key,
-                Body: stream
+                Body: stream,
+                ContentType: mime.lookup(file)
             }, this._wrapError(function(data) {
                 this.emit(consts.DONE, file, data);
             }));
