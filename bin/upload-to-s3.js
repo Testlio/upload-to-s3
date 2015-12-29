@@ -24,7 +24,7 @@ program
 
 const opts = {
     prefix: program.prefix,
-    flatten: program.flatten === 'false'
+    flatten: String(program.flatten) === 'true'
 };
 
 const uploader = new Uploader(program.bucket, program.args[0], opts);

@@ -49,9 +49,10 @@ class Uploader extends events.EventEmitter {
     }
 
     _removeAssetTargetDir(file) {
-        const dirname = path.resolve(path.dirname(this.target));
-        const res = path.resolve(file).replace(dirname, '');
-        return this.isDirectory ? res.replace(this.target, '') : res;
+        const target = path.resolve(this.target);
+        const dirname = path.resolve(path.dirname(target));
+        const res = path.resolve(file);
+        return this.isDirectory ? res.replace(target, '') : res;
     }
 
     _getTargetFilename(file) {
