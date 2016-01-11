@@ -33,5 +33,8 @@ const chlk = new chalk.constructor({ enabled: !program.stripAnsi });
 uploader
     .on('uploading', logUploading)
     .on('done', logDone)
-    .on('error', console.error)
+    .on('error', function(err) {
+        console.error(err);
+        process.exit(1);
+    })
     .start();
