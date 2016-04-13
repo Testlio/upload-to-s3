@@ -49,15 +49,8 @@ class Uploader extends events.EventEmitter {
         }));
     }
 
-    _removeAssetTargetDir(file) {
-        const target = path.resolve(this.target);
-        const dirname = path.resolve(path.dirname(target));
-        const res = path.resolve(file);
-        return this.isDirectory ? res.replace(target, '') : res;
-    }
-
     _getTargetFilename(file) {
-        const shortName = this.opts.flatten ? this._removeAssetTargetDir(file) : file;
+        const shortName = this.opts.flatten ? path.basename(file) : file;
         const prefix = this.opts.prefix;
         if (!prefix) {
             return shortName;
